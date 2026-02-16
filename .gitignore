@@ -1,0 +1,13 @@
+# build outputs / executables
+a.out
+*.o
+*.obj
+*.exe
+
+# di solito gli eseguibili linux non hanno estensione:
+Lezioni/[0-9]*
+Esercizi/[0-9]*
+
+# editor
+.vscode/
+
