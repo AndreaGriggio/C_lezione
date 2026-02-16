@@ -1,13 +1,18 @@
-# build outputs / executables
+# Eseguibili / output di compilazione
 a.out
 *.o
 *.obj
 *.exe
 
-# di solito gli eseguibili linux non hanno estensione:
-Lezioni/[0-9]*
-Esercizi/[0-9]*
+# File temporanei / backup
+*~
+*.swp
+*.tmp
 
-# editor
+# Cartelle editor
 .vscode/
+.idea/
+.DS_Store
 
+# Eseguibili creati in Lezioni (senza estensione)
+Lezioni/[0-9]*
