@@ -1,96 +1,85 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-
-
+#include <stdexcept>
 
 template <typename T>
-class ArrayCircolare{
-    private : 
+class ArrayCircolare {
+    private:
         int capacity;
-        int head;
-        int tail;
-
+        int head;   // indice del primo elemento
+        int tail;   // indice della prima cella libera (in coda)
+        int count;  // numero di elementi presenti
         T* data;
-    public :
-        ArrayCircolare(int capacity) : capacity(capacity), head(1), tail(0), data(new T[capacity]) {}
-        ArrayCircolare() : capacity(10), head(1), tail(0), data(new T[10]) {}
-        ~ArrayCircolare(){
-            delete[] data;
+
+    public:
+        ArrayCircolare(int capacity)
+            : capacity(capacity), head(0), tail(0), count(0), data(new T[capacity]) {}
+
+        ArrayCircolare()
+            : capacity(10), head(0), tail(0), count(0), data(new T[10]) {}
+
+        ~ArrayCircolare() { delete[] data; }
+
+        int getSize() const { return count; }
+        bool isEmpty() const { return count == 0; }
+        bool isFull() const { return count == capacity; }
+
+        void pushBack(const T& value) {
+            if (!isFull()){
+            data[tail] = value;
+            tail = (tail + 1) % capacity;
+            ++count;
+            }
         }
-    
-        void pushFront(T const value);
-        void pushBack(T const value);
-        T popFront();
-        T popBack();
-        void printList();
-        int getSize() const {return (head +abs(tail-capacity))%capacity;}
-        bool isEmpty() const {return head == (tail +1)%capacity ;}
-        bool isFull()const { return head == tail; }
+        void pushFront(const T& value) {
+            if (!isFull()){
+                head = (head - 1 + capacity) % capacity;
+                data[head] = value;
+                ++count;
+            } 
+        }
+
+        T popFront() {
+            if (!isEmpty()) {
+                T tmp = data[head];
+                head = (head + 1) % capacity;
+                --count;
+            return tmp;
+            }
+            return T();
+        }
+
+        T popBack() {
+            if (isEmpty()){ 
+                tail = (tail - 1 + capacity) % capacity;
+                T tmp = data[tail];
+                --count;
+                return tmp;
+            }
+            return T();
+        }
+
+        void printList() const {
+            for (int i = 0; i < capacity; i++) {
+                std::cout << i << ":[" << data[i] << "] ";
+            }
+            std::cout << "\nHead: " << head << " Tail: " << tail << " Count: " << count << "\n";
+        }
 };
 
-template <typename T>
-void ArrayCircolare<T>::pushFront(T value){
-    if(!isFull()){
-        data[head] = value;
-        head = (head + 1) % capacity;
-    }
-}
-
-template <typename T>
-void ArrayCircolare<T>::pushBack(T value){
-    if(!isFull()){
-        tail = (capacity - 1 - tail) %capacity;
-        data[tail] = value;
-    }
-}
-
-template <typename T>
-T ArrayCircolare<T>::popFront(){
-    if(!isEmpty()){
-        head = (head - 1) % capacity;
-        T tmp = data[head];
-        return tmp;
-    }
-}
-
-template <typename T>
-T ArrayCircolare<T>::popBack(){
-    if(!isEmpty()){
-        T tmp = data[tail];
-        tail = (tail + 1) % capacity;
-        return tmp;
-    }
-}
-template <typename T>
-std::string toString(T t){
-    std::ostringstream s;
-
-    s << "[" << t << "]";
-    return s.str();
-}
-
-template <typename T>
-void ArrayCircolare<T>::printList(){
-    for(int i = 0; i < capacity; i++){
-        std::cout << i << ":"<< toString(data[i]) << " ";
-    }
-    std::cout << std::endl;
-    std::cout <<  "Head : " << head << " Tail : " << tail << std::endl;
-    
-}
-
-
-template <typename T>
-using AC = ArrayCircolare<T>;
-int main(){
-
-    AC<int> ac {10};
-    int s = ac.getSize();
-    ac.pushFront(1);
-    ac.pushBack(2);
-    ac.printList();
-    std::cout << ac.getSize() << std::endl;
-
-    return 0;
+int main() {
+    ArrayCircolare<int> arr(5);
+    arr.pushBack(1);
+    arr.pushBack(2);
+    arr.pushBack(3);
+    arr.pushBack(4);
+    arr.pushBack(5);
+    arr.printList();
+    arr.pushFront(6);
+    arr.printList();
+    arr.popFront();
+    arr.printList();
+    arr.popBack();
+    arr.printList();
 }
