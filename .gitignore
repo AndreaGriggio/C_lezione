@@ -16,3 +16,6 @@ a.out
 
 # Eseguibili creati in Lezioni (senza estensione)
 Lezioni/[0-9]*
+
+SSHKEY
+SSHKEY.pub
