@@ -1,0 +1,1 @@
+line = line.substr(cfu_pos+1);
